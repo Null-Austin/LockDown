@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Request</title>
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            background: #e8e8e8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 450px;
+            margin: 30px auto;
+            background: #f5f5f5;
+            border: 2px solid #999;
+            padding: 25px;
+            box-shadow: inset 1px 1px 2px rgba(255,255,255,0.8), 
+                        inset -1px -1px 2px rgba(0,0,0,0.2);
+        }
+        h2 {
+            margin-top: 0;
+            font-size: 1.6em;
+            color: #222;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 1px 1px 1px rgba(255,255,255,0.8);
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            margin-bottom: 4px;
+            color: #333;
+            font-size: 0.95em;
+            font-weight: bold;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 6px 8px;
+            border: 2px inset #ddd;
+            background: #fff;
+            font-size: 0.9em;
+            font-family: "Courier New", monospace;
+            box-sizing: border-box;
+        }
+        input[type="text"]:disabled, textarea:disabled {
+            background: #e0e0e0;
+            color: #999;
+            border: 2px inset #ccc;
+            cursor: not-allowed;
+        }
+        input[type="checkbox"] {
+            margin-right: 6px;
+            vertical-align: middle;
+            transform: scale(1.2);
+        }
+        .inline-label {
+            display: inline-block;
+            margin-left: 4px;
+            font-weight: bold;
+            color: #333;
+        }
+        button {
+            width: 100%;
+            padding: 8px 12px;
+            background: #d4d0c8;
+            color: #000;
+            border: 2px outset #d4d0c8;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            font-family: "Times New Roman", Times, serif;
+        }
+        button:hover {
+            background: #e0dcd3;
+        }
+        button:active {
+            border: 2px inset #d4d0c8;
+        }
+        button:disabled {
+            background: #c0c0c0;
+            color: #666;
+            cursor: not-allowed;
+            border: 2px outset #c0c0c0;
+        }
+        .extra-data {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border: 2px inset #ddd;
+            font-family: "Courier New", monospace;
+            font-size: 0.75em;
+            line-height: 1.3;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            position: relative;
+        }
+        .extra-data-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+        .extra-data-title {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+        }
+        .copy-btn {
+            padding: 4px 8px;
+            background: #d4d0c8;
+            color: #000;
+            border: 2px outset #d4d0c8;
+            font-size: 0.8em;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: "Times New Roman", Times, serif;
+            width: auto;
+            margin: 0;
+        }
+        .copy-btn:hover {
+            background: #e0dcd3;
+        }
+        .copy-btn:active {
+            border: 2px inset #d4d0c8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Send Request</h2>
+        <form action="">
+            <div class="form-group">
+                <label for="content">Content</label>
+                <textarea name="content" id="content" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" name="hashing" id="hashing-checkbox">
+                <label for="hashing-checkbox" class="inline-label">Enable Hashing</label>
+            </div>
+            <div class="form-group">
+                <label for="hashing-method">Hashing Method</label>
+                <input type="text" name="hashing-method" class="hashing" id="hashing-method" disabled value="sha256">
+            </div>
+            <div class="form-group">
+                <input type="checkbox" name="encryption" id="encryption-checkbox">
+                <label for="encryption-checkbox" class="inline-label">Enable Encryption</label>
+            </div>
+            <div class="form-group">
+                <label for="encryption-iv">Encryption IV</label>
+                <input type="text" name="encryption-iv" class="encryption" id="encryption-iv" disabled>
+                <label for="encryption-key">Encryption Key</label>
+                <input type="text" name="encryption-key" class="encryption" id="encryption-key" disabled>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" name="decryption" id="decryption-checkbox">
+                <label for="decryption-checkbox" class="inline-label">Enable Decryption</label>
+            </div>
+            <div class="form-group">
+                <label for="decryption-iv">Decryption IV</label>
+                <input type="text" name="decryption-iv" class="decryption" id="decryption-iv" disabled>
+                <label for="decryption-key">Decryption Key</label>
+                <input type="text" name="decryption-key" class="decryption" id="decryption-key" disabled>
+            </div>
+            <button type="submit">Send</button>
+        </form>
+        <% if (extra) { %>
+        <div class="extra-data">
+            <div class="extra-data-header">
+                <span class="extra-data-title">Response Data</span>
+                <button type="button" class="copy-btn" onclick="copyExtraData()">Copy</button>
+            </div>
+            <div id="extra-content"><%=extra %></div>
+        </div>
+        <% } %>
+    </div>
+
+    <script>
+        // Handle parent-child relationships for form controls
+        document.addEventListener('DOMContentLoaded', function() {
+            const hashingCheckbox = document.getElementById('hashing-checkbox');
+            const encryptionCheckbox = document.getElementById('encryption-checkbox');
+            const decryptionCheckbox = document.getElementById('decryption-checkbox');
+            
+            const hashingInputs = document.querySelectorAll('.hashing');
+            const encryptionInputs = document.querySelectorAll('.encryption');
+            const decryptionInputs = document.querySelectorAll('.decryption');
+
+            // Function to toggle inputs based on checkbox state
+            function toggleInputs(checkbox, inputs, childCheckbox = null) {
+                const isEnabled = checkbox.checked;
+                
+                inputs.forEach(input => {
+                    input.disabled = !isEnabled;
+                });
+                
+                if (childCheckbox) {
+                    childCheckbox.disabled = !isEnabled;
+                    if (!isEnabled) {
+                        childCheckbox.checked = false;
+                        // Trigger change event for child checkbox to disable its inputs
+                        childCheckbox.dispatchEvent(new Event('change'));
+                    }
+                }
+            }
+
+            // Initially set up the form state
+            // Hashing controls its own inputs only
+            toggleInputs(hashingCheckbox, hashingInputs);
+            
+            // Encryption is independent and controls its own inputs
+            toggleInputs(encryptionCheckbox, encryptionInputs);
+            
+            // Decryption is also independent and controls its own inputs
+            toggleInputs(decryptionCheckbox, decryptionInputs);
+
+            // Add event listeners
+            hashingCheckbox.addEventListener('change', function() {
+                toggleInputs(this, hashingInputs);
+            });
+
+            encryptionCheckbox.addEventListener('change', function() {
+                toggleInputs(this, encryptionInputs);
+            });
+
+            decryptionCheckbox.addEventListener('change', function() {
+                toggleInputs(this, decryptionInputs);
+            });
+        });
+
+        // Function to copy extra data to clipboard
+        function copyExtraData() {
+            const extraContent = document.getElementById('extra-content');
+            if (extraContent) {
+                const textToCopy = extraContent.textContent || extraContent.innerText;
+                
+                // Use the modern clipboard API if available
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(textToCopy).then(function() {
+                        // Visual feedback
+                        const copyBtn = document.querySelector('.copy-btn');
+                        const originalText = copyBtn.textContent;
+                        copyBtn.textContent = 'Copied!';
+                        copyBtn.style.background = '#90EE90';
+                        setTimeout(function() {
+                            copyBtn.textContent = originalText;
+                            copyBtn.style.background = '#d4d0c8';
+                        }, 1500);
+                    }).catch(function(err) {
+                        console.error('Failed to copy text: ', err);
+                        fallbackCopyTextToClipboard(textToCopy);
+                    });
+                } else {
+                    // Fallback for older browsers
+                    fallbackCopyTextToClipboard(textToCopy);
+                }
+            }
+        }
+
+        // Fallback copy function for older browsers
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    // Visual feedback
+                    const copyBtn = document.querySelector('.copy-btn');
+                    const originalText = copyBtn.textContent;
+                    copyBtn.textContent = 'Copied!';
+                    copyBtn.style.background = '#90EE90';
+                    setTimeout(function() {
+                        copyBtn.textContent = originalText;
+                        copyBtn.style.background = '#d4d0c8';
+                    }, 1500);
+                }
+            } catch (err) {
+                console.error('Fallback: Unable to copy', err);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+    </script>
+</body>
+</html>
