@@ -1,0 +1,42 @@
+[
+    {
+        "description": "Display this help information",
+        "flag": "--help"
+    },
+    {
+        "description": "Specify text content to process",
+        "flag": "-c <content>"
+    },
+    {
+        "description": "Specify file path to read content from",
+        "flag": "-f <filepath>"
+    },
+    {
+        "description": "Set custom encryption/decryption key (default: 'example')",
+        "flag": "--key <key>"
+    },
+    {
+        "description": "Set custom initialization vector for encryption/decryption (default: 'example')",
+        "flag": "--iv <iv>"
+    },
+    {
+        "description": "Hash the content using specified algorithm (default: sha256)",
+        "flag": "--hash [algorithm]"
+    },
+    {
+        "description": "Encrypt the content using specified algorithm (default: aes-256-cbc)",
+        "flag": "--encrypt [algorithm]"
+    },
+    {
+        "description": "Decrypt the content using specified algorithm (default: aes-256-cbc)",
+        "flag": "--decrypt [algorithm]"
+    },
+    {
+        "description": "Output result to specified file",
+        "flag": "-o <filepath>"
+    },
+    {
+        "description": "Suppress console output",
+        "flag": "--mute"
+    }
+]

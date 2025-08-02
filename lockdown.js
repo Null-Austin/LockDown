@@ -3,6 +3,7 @@ const minimist = require('minimist')
 const fs = require('fs')
 const colors = require('colors');
 const crypto = require('crypto')
+const path = require('path')
 
 // set all basic stuff
 var argv;
@@ -18,6 +19,24 @@ argv = minimist(process.argv.slice(2))
 // custom functions
 function log(...data){
     console.log(...data)
+}
+
+if (argv['help']) {
+    try {
+        const jsonPath = path.join(__dirname, 'commands.json');
+        const jsonData = fs.readFileSync(jsonPath, 'utf8');
+        const commands = JSON.parse(jsonData);
+
+        commands.forEach(({ description, flag }) => {
+            log(
+                `${colors.cyan(colors.underline('Flag:'))} ${flag}\n` +
+                `${colors.green(colors.underline('Description:'))} ${description}\n`
+            );
+        });
+    } catch (err) {
+        console.error(`${colors.red('Error while trying to get help (--help):')} ${err}`);
+    }
+    process.exit(0);
 }
 
 // checks
