@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Null-Austin/LockDown#readme",
   "dependencies": {
     "colors": "^1.4.0",
+    "crypto": "^1.0.1",
     "minimist": "^1.2.8"
   }
 }
