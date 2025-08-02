@@ -26,10 +26,22 @@ function hash(method,content){
         hash.update(content)
         content = hash.digest('hex')
     } catch (err){
-        console.error(`${colors.red(`Error while trying to hash the value (--hash):`)} ${err}`)
         return new Error(err)
     }
     return content
+}
+function encrypt(content, iv, key, algorithm){
+    try{
+        let keyBuffer = crypto.createHash('sha256').update(key).digest()
+        let ivBuffer = crypto.createHash('md5').update(iv).digest()
+        
+        let cipher = crypto.createCipheriv(algorithm, keyBuffer, ivBuffer)
+        content = cipher.update(content,'utf8','hex')
+        content += cipher.final('hex')
+        return content
+    } catch (err){
+        return new Error(err)
+    }
 }
 
 if (argv['help']) {
@@ -98,12 +110,7 @@ if (argv['encrypt']){
         algorithm =  'aes-256-cbc'
     }
     try{
-        let keyBuffer = crypto.createHash('sha256').update(key).digest()
-        let ivBuffer = crypto.createHash('md5').update(iv).digest()
-        
-        let cipher = crypto.createCipheriv(algorithm, keyBuffer, ivBuffer)
-        content = cipher.update(content,'utf8','hex')
-        content += cipher.final('hex')
+        content = encrypt(content,iv,key,algorithm)
     } catch (err){
         console.error(`${colors.red(`Error while trying to encrypt the value (--encrypt):`)} ${err}`)
     }
