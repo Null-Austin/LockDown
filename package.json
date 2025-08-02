@@ -1,0 +1,23 @@
+{
+  "name": "lockdown",
+  "version": "1.0.0",
+  "description": "Lockdown is an CLI encryption/decryption/hashing tool.",
+  "main": "lockdown.js",
+  "scripts": {
+    "start":"node lockdown.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Null-Austin/LockDown.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Null-Austin/LockDown/issues"
+  },
+  "homepage": "https://github.com/Null-Austin/LockDown#readme",
+  "dependencies": {
+    "minimist": "^1.2.8"
+  }
+}
