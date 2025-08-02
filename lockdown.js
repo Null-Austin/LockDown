@@ -35,6 +35,28 @@ if (argv['help']) {
     process.exit(0);
 }
 
+if (argv['gui']) {
+    try {
+        const guiPath = path.join(__dirname, 'gui', 'gui.js');
+        if (!fs.existsSync(guiPath)) {
+            console.error(`${colors.red('Error: GUI file not found at:')} ${guiPath}`);
+            process.exit(1);
+        }
+        
+        console.log(`${colors.green('Starting GUI server...')}`);
+        console.log(`${colors.cyan('GUI will be available at:')} ${colors.underline('http://localhost:3000')}`);
+        
+        // Import and run the GUI server
+        require('./gui/gui.js');
+        
+        // Exit this process since the GUI server will take over
+        return;
+    } catch (err) {
+        console.error(`${colors.red('Error while trying to start GUI (--gui):')} ${err}`);
+        process.exit(1);
+    }
+}
+
 // checks
 if (argv['c']){
     try{

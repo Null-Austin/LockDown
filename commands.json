@@ -4,6 +4,10 @@
         "flag": "--help"
     },
     {
+        "description": "Start the graphical user interface web server",
+        "flag": "--gui"
+    },
+    {
         "description": "Specify text content to process",
         "flag": "-c <content>"
     },
