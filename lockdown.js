@@ -20,6 +20,17 @@ argv = minimist(process.argv.slice(2))
 function log(...data){
     console.log(...data)
 }
+function hash(method,content){
+    try{
+        const hash = crypto.createHash(method)
+        hash.update(content)
+        content = hash.digest('hex')
+    } catch (err){
+        console.error(`${colors.red(`Error while trying to hash the value (--hash):`)} ${err}`)
+        return new Error(err)
+    }
+    return content
+}
 
 if (argv['help']) {
     try {
@@ -76,9 +87,7 @@ if (argv['hash']){
         method =  'sha256'
     }
     try{
-        const hash = crypto.createHash(method)
-        hash.update(content)
-        content = hash.digest('hex')
+        content = hash(method,content)
     } catch (err){
         console.error(`${colors.red(`Error while trying to hash the value (--hash):`)} ${err}`)
     }
