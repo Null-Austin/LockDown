@@ -3,6 +3,7 @@ const minimist = require('minimist')
 const fs = require('fs')
 const colors = require('colors');
 const crypto = require('crypto')
+const moduleHelper = require('./module')
 const path = require('path')
 
 // set all basic stuff
@@ -16,48 +17,6 @@ var output = 0
 // get arguments
 argv = minimist(process.argv.slice(2))
 
-// custom functions
-function log(...data){
-    console.log(...data)
-}
-function hash(method,content){
-    try{
-        const hash = crypto.createHash(method)
-        hash.update(content)
-        content = hash.digest('hex')
-    } catch (err){
-        return new Error(err)
-    }
-    return content
-}
-function encrypt(content, iv, key, algorithm){
-    try{
-        let keyBuffer = crypto.createHash('sha256').update(key).digest()
-        let ivBuffer = crypto.createHash('md5').update(iv).digest()
-        
-        let cipher = crypto.createCipheriv(algorithm, keyBuffer, ivBuffer)
-        content = cipher.update(content,'utf8','hex')
-        content += cipher.final('hex')
-        return content
-    } catch (err){
-        return new Error(err)
-    }
-}
-function decrypt(content, iv, key, algorithm){
-    try{
-        let keyBuffer = crypto.createHash('sha256').update(key).digest()
-        let ivBuffer = crypto.createHash('md5').update(iv).digest()
-        
-        let decipher = crypto.createDecipheriv(algorithm, keyBuffer, ivBuffer)
-        content = decipher.update(content,'hex','utf8')
-        content += decipher.final('utf8')
-
-        return content
-    } catch (err){
-        return new Error(err)
-    }
-}
-
 if (argv['help']) {
     try {
         const jsonPath = path.join(__dirname, 'commands.json');
@@ -65,7 +24,7 @@ if (argv['help']) {
         const commands = JSON.parse(jsonData);
 
         commands.forEach(({ description, flag }) => {
-            log(
+            moduleHelper.log(
                 `${colors.cyan(colors.underline('Flag:'))} ${flag}\n` +
                 `${colors.green(colors.underline('Description:'))} ${description}\n`
             );
@@ -113,35 +72,49 @@ if (argv['hash']){
         method =  'sha256'
     }
     try{
-        content = hash(method,content)
+        content = moduleHelper.hash(method,content)
     } catch (err){
         console.error(`${colors.red(`Error while trying to hash the value (--hash):`)} ${err}`)
     }
 }
 if (argv['encrypt']){
+    if (!content) {
+        console.error(`${colors.red('Error: No content provided for encryption. Use -c <content> or -f <file> to specify content.')}`)
+        process.exit(1)
+    }
     let algorithm = argv['encrypt']
     if (typeof algorithm !== 'string'){
         algorithm =  'aes-256-cbc'
     }
     try{
-        content = encrypt(content,iv,key,algorithm)
+        content = moduleHelper.encrypt(content,iv,key,algorithm)
     } catch (err){
         console.error(`${colors.red(`Error while trying to encrypt the value (--encrypt):`)} ${err}`)
+        process.exit(1)
     }
 }
 if (argv['decrypt']){
+    if (!content) {
+        console.error(`${colors.red('Error: No content provided for decryption. Use -c <content> or -f <file> to specify content.')}`)
+        process.exit(1)
+    }
     let algorithm = argv['decrypt']
     if (typeof algorithm !== 'string'){
         algorithm =  'aes-256-cbc'
     }
-    content = decrypt(content,iv,key,algorithm)
+    try{
+        content = moduleHelper.decrypt(content,iv,key,algorithm)
+    } catch (err){
+        console.error(`${colors.red(`Error while trying to decrypt the value (--decrypt):`)} ${err}`)
+        process.exit(1)
+    }
 }
 
 if (argv['o']){
     try{
         let file = argv['o']
         fs.writeFileSync(file,content)
-        log(colors.green(`Output saved to: ${colors.underline(file)}`))
+        moduleHelper.log(colors.green(`Output saved to: ${colors.underline(file)}`))
     } catch (err){
         console.error(`${colors.red(`Error while trying to write to file (-o):`)} ${err}`)
     }

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Lockdown is an CLI encryption/decryption/hashing tool.",
   "main": "lockdown.js",
+  "type": "commonjs",
   "scripts": {
     "start": "node lockdown.js"
   },
@@ -20,6 +21,7 @@
   "dependencies": {
     "colors": "^1.4.0",
     "crypto": "^1.0.1",
+    "express": "^5.1.0",
     "minimist": "^1.2.8"
   }
 }
