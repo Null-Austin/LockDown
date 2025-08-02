@@ -6,6 +6,7 @@ const colors = require('colors');
 // set all basic stuff
 var argv;
 var content;
+var mute;
 var output = 0
 
 // get arguments
@@ -41,3 +42,9 @@ if (argv['o']){
         console.error(`${colors.red(`Error while trying to write to file (-o):`)} ${err}`)
     }
 }
+if (argv['mute']){
+    mute = true
+}
+
+// output content
+if (!mute) console.log(content)
