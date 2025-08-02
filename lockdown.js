@@ -80,6 +80,22 @@ if (argv['encrypt']){
         console.error(`${colors.red(`Error while trying to encrypt the value (--encrypt):`)} ${err}`)
     }
 }
+if (argv['decrypt']){
+    let algorithm = argv['decrypt']
+    if (typeof algorithm !== 'string'){
+        algorithm =  'aes-256-cbc'
+    }
+    try{
+        let keyBuffer = crypto.createHash('sha256').update(key).digest()
+        let ivBuffer = crypto.createHash('md5').update(iv).digest()
+        
+        let decipher = crypto.createDecipheriv(algorithm, keyBuffer, ivBuffer)
+        content = decipher.update(content,'hex','utf8')
+        content += decipher.final('utf8')
+    } catch (err){
+        console.error(`${colors.red(`Error while trying to decrypt the value (--decrypt):`)} ${err}`)
+    }
+}
 
 if (argv['o']){
     try{
