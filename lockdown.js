@@ -17,11 +17,17 @@ function log(...data){
 }
 
 // checks
+if (argv['c']){
+    try{
+        content = argv['c']
+    } catch (err){
+        console.error(`${colors.red(`Error while trying to get text content (-c):`)} ${err}`)
+    }
+}
 if (argv['f']){
     try{
         let file = argv['f']
         content = fs.readFileSync(file,'utf8')
-        log(content)
     } catch (err){
         console.error(`${colors.red(`Error while trying to fetch file (-f):`)} ${err}`)
     }
