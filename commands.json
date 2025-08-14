@@ -4,7 +4,7 @@
         "flag": "--help"
     },
     {
-        "description": "Start the graphical user interface web server",
+        "description": "[Deprecated, please do not use]Start the graphical user interface web server",
         "flag": "--gui"
     },
     {
