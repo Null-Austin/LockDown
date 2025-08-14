@@ -5,7 +5,11 @@
   "main": "lockdown.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node lockdown.js"
+    "start": "node lockdown.js",
+    "build-windows": "pkg lockdown.js --targets node18-win-x64 -o executables/lockdown.exe",
+    "build-linux": "pkg lockdown.js --targets node18-linux-x64 -o executables/lockdown-linux",
+    "build-macos": "pkg lockdown.js --targets node18-macos-x64 -o executables/lockdown-macos",
+    "build-all": "npm run build-windows && npm run build-linux && npm run build-macos"
   },
   "repository": {
     "type": "git",
